@@ -1,5 +1,5 @@
 """
-Course CS2301 MW 1:30-2:50pm
+Course CS2302 MW 1:30-2:50pm
 Instructor:Fuentes, Olac
 Tovar, Brianna
 Date of last modification: 4/1/2019
@@ -7,6 +7,7 @@ Date of last modification: 4/1/2019
 This lab is over comparing running times of Hash Tables using chaining methods
 and Binary Search Trees (BSTs) w/ strings
 """
+import time
 #creating object Hash
 class HashTableC(object):
     # Builds a hash table of size 'size'
@@ -48,16 +49,19 @@ def LoadFactor(H): #returns the load factor of table (all items/amount of items)
 def Compare(H,k): #comparing the two word's bucket, position, and length
     b_i=FindC(H,k)
 
-H = HashTableC(11)
+H = HashTableC(11) #starting size
 i_size=len(H.item)
-A = ['data','structures','computer','science','university','of','texas','at','el','paso']
+#taking out the code given for the list for Hash
+"""
+A = ['data','notes','computer','human','university','school','texas','Carolina','back','forward']
 for a in A:
     InsertC(H,a,len(a))
     print(H.item)
-
+"""
+"""
 for a in A: # Prints bucket, position in bucket, and word length
     print(a,FindC(H,a))
-
+"""
     
 #_#_#_#_   #separating BST and Hash for organization
     
@@ -114,10 +118,37 @@ def numNodes(T):
     return count
 
 # Code to test the functions above
-T = None
+"""
 A = [70, 50, 90, 130, 150, 40, 10, 30, 100, 180, 45, 60, 140, 42]
 for a in A:
     T = Insert(T,a)
+""" #commented out code given 
+#open file function and adding to lists BST and Hash
+def HashBuild():
+    file_object=open('glove.6B.50d.txt','r')
+    embList=[] #storing
+    #starts readding through each line
+    for line in file_object:
+        t=line.split(" ") #separating lines of code w/ space
+        w=t[0] #beginning
+        embed=t[1:] #nextto beginning
+        for i in range (len(embed)):
+            #string to floats
+            embList.append(float(embed[i]))
+        InsertC(H,w,embList) #inserts into H, the w (word) and List
+        
+def BSTBuild():
+    T = None
+    #same as Hash except now with Tree
+    f_object=open('glove.6B.50d.txt','r')
+    emList=[] #another list for embedding
+    for line in f_object:
+        t=line.split(" ") #separating lines of code w/ space
+        w=t[0] #beginning
+        embed=t[1:] #nextto beginning
+        for i in range (len(embed)):
+            emList.append(float(embed[i]))
+        T=Insert(T,[w,emList])
 
 #first prompts user to choose BST or Hash Method
 print('Choose table implementation')
@@ -125,10 +156,13 @@ question=input('You have two choices: BST or Hash? ')
 
 if question=='Hash':
     print('Your choice: ',question)
-    print('Building Hash Table...')
+    start=time.time()
+    print('Building Hash Table...', HashBuild())
+    end=time.time()-start
+    print('Running time for HashBuild', end)
     print('--Hash Table stats--')
-    print('Initial table size: ',i_size)
-    print('Final Table size: ')
+    print('Initial table size: ',i_size) #declared by Hash size
+    print('Final Table size: ',len(H.item)) #returns the length after insertion
     print('Load Factor: ',LoadFactor(H))
     print('Percentage of Empty Lists: ')
     print('Standard deviation of the lengths of lists: ')
@@ -137,8 +171,12 @@ if question=='Hash':
     print('Word Similarities Found: ')
     
 if question=='BST':
+    T=BSTBuild() #calling to built T
     print('Your choice: ',question)
-    print('Building BST...')
+    start=time.time()
+    print('Building BST...',BSTBuild)
+    end=time.time()-start
+    print('Running time for BSTBuild', end)
     print('--BST stats--')
     print('Number of Nodes: ',numNodes(T))
     print('Height: ',height(T))
